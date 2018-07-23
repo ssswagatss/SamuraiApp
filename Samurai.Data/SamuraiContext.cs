@@ -9,13 +9,17 @@ namespace SamuraiApp.Data
     public class SamuraiContext : DbContext
     {
 
-        public static readonly LoggerFactory SamuraiAppLoggerFactory
-            = new LoggerFactory(new[] { new ConsoleLoggerProvider((category,level)
-                                            =>category ==DbLoggerCategory.Database.Command.Name && level == LogLevel.Information,true)});
 
         public DbSet<Domain.Samurai> Samurais { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<Battle> Battles { get; set; }
+
+
+
+        public static readonly LoggerFactory SamuraiAppLoggerFactory
+            = new LoggerFactory(new[] { new ConsoleLoggerProvider((category,level)
+                                            =>category ==DbLoggerCategory.Database.Command.Name && level == LogLevel.Information,true)});
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

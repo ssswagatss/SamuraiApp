@@ -11,13 +11,18 @@ namespace SamuraiApp.Domain
         public Samurai()
         {
             this.Quotes = new List<Quote>();
+            this.SamuraiBattles = new List<SamuraiBattle>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Quote> Quotes { get; set; }
-        //public int BattleId { get; set; }
         public List<SamuraiBattle> SamuraiBattles { get; set; }
-
         public SecretIdentity SecretIdentity { get; set; }
+
+
+        public List<Battle> Battles()
+        {
+            return this.SamuraiBattles.Select(x => x.Battle).ToList();
+        }
     }
 }

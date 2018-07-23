@@ -14,87 +14,80 @@ namespace SamuraiApp.UI
         private static SamuraiContext _db = new SamuraiContext();
         static void Main(string[] args)
         {
-            //InsertData();
-            //InsertMultipleData();
-            //var samurais = _db.Samurais.OrderBy(x=>x.Name).LastOrDefault(x=>x.Name.StartsWith("Swa"));
-            //RetriveAndUpdate();
-            using (var db = new SamuraiContext())
-            {
-                //var sam = db.Samurais.Find(2);
-                //sam.Name = "Again updated";
-                //db.Entry(sam).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                //db.SaveChanges();
 
-                //var sam = new Domain.Samurai() {
-                //    Name = "Samurai with Quotes",
-                //    Quotes=new List<Domain.Quote>() {
-                //        new Quote{
-                //            Text="Samurai Quote 1"
-                //        },
-                //        new Quote{
-                //            Text="Samurai Quote 2"
-                //        }
-                //    }
-                //};
-                //db.Samurais.Add(sam);
+            //AddSamurais();
+            //PrintSamurais();
 
-                //var sam = db.Samurais.Find(6);
-                //sam.Quotes.Add(new Quote { Text = "Samurai Quote 3" });
+            //AddBattleToSamurai();
 
-                //db.Samurais.Update(sam);
-
-
-                //var quotes = new Quote { Text = "Samurai Quote 3",SamuraiId=6 };
-                //db.Quotes.Add(quotes);
-
-                //var sam = db.Samurais.Include(x => x.Quotes).Where(x=>x.Id==6).ToList();
-                //db.SaveChanges();
-            }
+            PrintSamuraiWithBattles();
 
             Console.ReadKey();
         }
 
-        #region RelatedData
+        private static void PrintSamuraiWithBattles()
+        {
+            var sams = _db.Samurais
+                            .Include(x => x.SamuraiBattles)
+                            .ThenInclude(y => y.Battle)
+                            .ToList();
 
+            foreach (var s in sams)
+            {
+                Console.WriteLine($"{s.Id} - {s.Name}");
+                Console.WriteLine("---------------------------------------------");
+                foreach (var b in s.Battles())
+                {
+                    Console.WriteLine($"Battle id - {b.Id}  -  {b.Name}");
+                }
+            }
+        }
+
+
+        #region RelatedData
+        private static void PrintSamurais()
+        {
+            var sams = _db.Samurais.ToList();
+            Console.WriteLine("\n\nPrinting Samurais............");
+
+            foreach (var s in sams)
+            {
+                Console.WriteLine($"{s.Id} - {s.Name}");
+            }
+        }
+        private static void AddSamurais()
+        {
+            if (!_db.Samurais.Any())
+            {
+                var sams = new List<Domain.Samurai>()
+                {
+                     new Domain.Samurai() { Name = "Divya" }
+                    ,new Domain.Samurai() { Name = "Swagat" }
+                    ,new Domain.Samurai() { Name = "Pradeep" }
+                    ,new Domain.Samurai() { Name = "Rahul" }
+                };
+                _db.AddRange(sams);
+                _db.SaveChanges();
+            }
+        }
+
+        private static void AddBattleToSamurai()
+        {
+            var sam = _db.Samurais.Include(x => x.SamuraiBattles).FirstOrDefault(x=>x.Id==12);
+            if (sam != null && !sam.SamuraiBattles.Any())
+            {
+                sam.SamuraiBattles.Add(new SamuraiBattle {
+                    Battle=new Battle
+                    {
+                        Name="Panipath Yudh"
+                    }
+                });
+                _db.SaveChanges();
+            }
+        }
+
+        
         #endregion
 
-        private static void RetriveAndUpdate()
-        {
-            using (var db = new SamuraiContext())
-            {
-                var samurais = db.Samurais.ToList();
-                samurais.ForEach(x =>
-                {
-                    x.Name += "Updated";
-                });
-                db.SaveChanges();
-            }
-        }
-
-        private static void InsertData()
-        {
-            var samurai1 = new Domain.Samurai()
-            {
-                Name = "Swagat"
-            };
-
-            using (var db = new SamuraiContext())
-            {
-                db.Samurais.Add(samurai1);
-                db.SaveChanges();
-            }
-        }
-        private static void InsertMultipleData()
-        {
-            var samurai1 = new Domain.Samurai() { Name = "Swagat3" };
-            var samurai2 = new Domain.Samurai() { Name = "Divya" };
-            var samurai3 = new Domain.Samurai() { Name = "Pravat" };
-
-            using (var db = new SamuraiContext())
-            {
-                db.Samurais.AddRange(samurai1, samurai2, samurai3);
-                db.SaveChanges();
-            }
-        }
     }
 }
