@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SamuraiApp.Domain")]
+[assembly: AssemblyTitle("SamuraiApp.UI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SamuraiApp.Domain")]
+[assembly: AssemblyProduct("SamuraiApp.UI")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a22ec559-6d65-4a41-89ee-bd5c4604f557")]
+[assembly: Guid("b5a51347-ce50-472b-96dd-54d9b052fba7")]
 
 // Version information for an assembly consists of the following four values:
 //
