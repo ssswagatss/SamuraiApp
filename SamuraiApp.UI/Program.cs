@@ -21,8 +21,21 @@ namespace SamuraiApp.UI
             //AddBattleToSamurai();
 
             PrintSamuraiWithBattles();
-
+            ModifyBattlesForSamurai(12);
+            PrintSamuraiWithBattles();
             Console.ReadKey();
+        }
+
+        private static void ModifyBattlesForSamurai(int samuraiId)
+        {
+            var sam = _db.Samurais
+                            .Include(x => x.SamuraiBattles)
+                            .FirstOrDefault(x => x.Id == samuraiId);
+            if (sam != null)
+            {
+                sam.SamuraiBattles.Clear();
+                _db.SaveChanges();
+            }
         }
 
         private static void PrintSamuraiWithBattles()
@@ -30,6 +43,7 @@ namespace SamuraiApp.UI
             var sams = _db.Samurais
                             .Include(x => x.SamuraiBattles)
                             .ThenInclude(y => y.Battle)
+                            .Where(x => x.SamuraiBattles.Any())
                             .ToList();
 
             foreach (var s in sams)
@@ -73,20 +87,21 @@ namespace SamuraiApp.UI
 
         private static void AddBattleToSamurai()
         {
-            var sam = _db.Samurais.Include(x => x.SamuraiBattles).FirstOrDefault(x=>x.Id==12);
+            var sam = _db.Samurais.Include(x => x.SamuraiBattles).FirstOrDefault(x => x.Id == 12);
             if (sam != null && !sam.SamuraiBattles.Any())
             {
-                sam.SamuraiBattles.Add(new SamuraiBattle {
-                    Battle=new Battle
+                sam.SamuraiBattles.Add(new SamuraiBattle
+                {
+                    Battle = new Battle
                     {
-                        Name="Panipath Yudh"
+                        Name = "Panipath Yudh"
                     }
                 });
                 _db.SaveChanges();
             }
         }
 
-        
+
         #endregion
 
     }
